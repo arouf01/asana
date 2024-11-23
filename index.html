@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asana Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Section 1: API Key -->
+        <div id="section1" class="form-section active">
+            <h1>Connect to Asana</h1>
+            <input type="text" id="apiKey" placeholder="Enter Asana API Key">
+            <button onclick="nextBtn()" id="connectBtn">Connect</button>
+            <p id="connected"></p>
+        </div>
+
+        <!-- Section 2: Create Task -->
+        <div id="section2" class="form-section hidden">
+            <h1>Create Task</h1>
+            <div class="form-group">
+                <label for="projectDropdown">Select Project</label>
+                <select id="projectDropdown">
+                    <option value="">Select a Project</option>
+                </select>
+
+                <label for="sectionDropdown">Select a Section</label>
+                <select id="sectionDropdown">
+                    <option value="">Select a Section</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="taskName">Task Name</label>
+                <input type="text" id="taskName" placeholder="Enter Task Name">
+            </div>
+            <div class="form-actions">
+                <button onclick="createTask()" id="createTaskBtn">Create Task</button>
+                <button onclick="logOut()" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
