@@ -1,149 +1,177 @@
 /* General Styles */
 * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-  }
-  
-  body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #6a93ff, #94e3ff);
-  }
-  
-  .container {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-  }
-  
-  /* Form Section */
-  .form-section {
-      display: none;
-      opacity: 0;
-      transform: scale(0.9);
-      transition: all 0.4s ease-in-out;
-  }
-  
-  .form-section.active {
-      display: block;
-      opacity: 1;
-      transform: scale(1);
-  }
-  
-  .hidden {
-      display: none;
-  }
-  
-  /* Input Fields */
-  input[type="text"],
-  select {
-      width: 100%;
-      padding: 10px;
-      margin: 15px 0;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 16px;
-  }
-  
-  /* Buttons */
-  button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s ease;
-  }
-  
-  #connectBtn {
-      background-color: #6a93ff;
-      color: white;
-  }
-  
-  #connectBtn:hover {
-      background-color: #4a73cc;
-  }
-  
-  #connectBtn:active {
-      background-color: #3c60a8;
-  }
-  
-  #logoutBtn {
-      background-color: #ff6b6b;
-      color: white;
-      margin-top: 0;
-  }
-  
-  #logoutBtn:hover {
-      background-color: #d95353;
-  }
-  
-  #logoutBtn:active {
-      background-color: #a94444;
-  }
-  
-  #createTaskBtn {
-      background-color: #38d39f;
-      color: white;
-  }
-  
-  #createTaskBtn:hover {
-      background-color: #2ba57a;
-  }
-  
-  #createTaskBtn:active {
-      background-color: #20825f;
-  }
-  
-  /* Form Group */
-  .form-group {
-      margin-bottom: 20px;
-  }
-  
-  label {
-      font-size: 14px;
-      font-weight: bold;
-      color: #555;
-  }
-  
-  .form-actions {
-      display: flex;
-      justify-content: space-between;
-  }
-  
-  .form-actions button {
-      width: 48%;
-  }
-  
-  /* Animations */
-  button:focus {
-      outline: none;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  button.animate {
-      animation: button-pop 0.3s ease-in-out;
-  }
-  
-  @keyframes button-pop {
-      0% {
-          transform: scale(1);
-      }
-      50% {
-          transform: scale(1.1);
-      }
-      100% {
-          transform: scale(1);
-      }
-  }
-  
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #6a93ff, #94e3ff);
+}
+
+.container {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+h1{
+    text-align: center;
+    padding: 15px;
+    margin: 15px;
+}
+/* Form Section */
+.form-section {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+}
+
+.form-section.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Input Fields */
+input[type="text"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+select:focus {
+    box-shadow: 0 4px 10px rgba(0, 128, 255, 0.3);
+    outline: none;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#connectBtn {
+    background: linear-gradient(135deg, #6a93ff, #4a73cc);
+    color: white;
+}
+
+#connectBtn:hover {
+    background: linear-gradient(135deg, #4a73cc, #3c60a8);
+    box-shadow: 0 6px 15px rgba(74, 115, 204, 0.3);
+}
+
+#logoutBtn {
+    background: linear-gradient(135deg, #ff6b6b, #d95353);
+    color: white;
+}
+
+#logoutBtn:hover {
+    background: linear-gradient(135deg, #d95353, #a94444);
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+}
+
+#createTaskBtn {
+    background: linear-gradient(135deg, #38d39f, #2ba57a);
+    color: white;
+}
+
+#createTaskBtn:hover {
+    background: linear-gradient(135deg, #2ba57a, #20825f);
+    box-shadow: 0 6px 15px rgba(56, 211, 159, 0.3);
+}
+
+#connected {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #f0f0f0; /* Light gray for default state */
+    color: #555; /* Neutral text color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Smooth transitions for changes */
+    min-height: 40px; /* Ensure consistent size */
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-actions button {
+    width: 48%;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+button.animate {
+    animation: button-pop 0.3s ease-in-out;
+}
+
+@keyframes button-pop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

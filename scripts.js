@@ -1,3 +1,16 @@
+// Checkiing If API Key In Local Storage
+window.onload = () => {
+      let getAPIKeyFromLocalStroge = localStorage.getItem('asana-api-key');
+  
+      if (getAPIKeyFromLocalStroge !== null) {
+          if (!document.getElementById("section2").classList.contains("active")) {
+                nextSection();
+                nextBtn();
+          }
+      }
+  };
+
+
 // Function For Next Section
 function nextSection() {
       document.getElementById("section1").classList.remove("active");
@@ -7,7 +20,10 @@ function nextSection() {
 
 // Next Button Function For - Getting Projects 
 async function nextBtn() {
-      let APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
+      // Get API Key
+      var APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
+
+      // Getting Projects
       let response = await fetch('https://app.asana.com/api/1.0/projects', {
             method: 'GET',
             headers: {
@@ -16,11 +32,18 @@ async function nextBtn() {
             }
       });
 
+      // Checking If Response is OK!
       if (response.ok) {
+
+            // Saving API Key to Local Stroage
+            localStorage.setItem('asana-api-key', APIKey);
+
             document.getElementById('connected').innerText = 'Connected';
             let allResponse = await response.json()
             let responseData = allResponse.data;
             //console.log(responseData)
+
+
             let getGroupFromHTML = document.getElementById('projectDropdown');
             for (let i = 0; i < responseData.length; i++){
                   let projectName = responseData[i].name;
@@ -47,10 +70,12 @@ async function nextBtn() {
 
 // Add Event Listener For - Project Change then Change The Section
 const getGroupID = document.getElementById('projectDropdown');
+
 getGroupID.addEventListener('change', (event) => {
       let project_gid = event.target.value;
 
       let APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
+
       // Getting Sections for the Project
       getSections()
       async function getSections() {
@@ -103,7 +128,7 @@ async function createTask() {
                   'authorization': `Bearer ${APIKey}`
             }
       });
-      let workSpaceID = 0;
+      let workSpaceID;
       if (getWorkSpace.ok) {
             let allWorkSpace = await getWorkSpace.json()
             workSpaceID = allWorkSpace.data[0].gid;
@@ -115,20 +140,20 @@ async function createTask() {
       // Getting All the Needed Value
       let taskName = document.getElementById('taskName').value;
       let projectID = document.getElementById('projectDropdown').value;
-
-      // Working on Section -_-
       let sectionID = document.getElementById('sectionDropdown').value;
 
       //console.log('Project ID: ',projectID,'Section ID: ', sectionID, 'workSpace ID: ',workSpaceID)
       
       let data = {'data':{
             'name': taskName,
-            'projects': projectID,
+            "memberships": [{
+                        "project":  projectID,
+                        "section":  sectionID
+                  }],
             'workspace': workSpaceID
       }
 
       }
-      //console.log(data)
 
       // Creating Task
       let createTaskResponse = await fetch('https://app.asana.com/api/1.0/tasks', {
@@ -140,10 +165,14 @@ async function createTask() {
             },
             body: JSON.stringify(data)
       });
+
+      // Checking If Response is OK
       if (createTaskResponse.ok) {
             let allResponse = await createTaskResponse.json()
             let responseData = allResponse.data;
-            console.log('response ok ',responseData)
+            console.log('response ok ', responseData);
+            alert('Successfully Task Added')
+            clearForm();
       }
       else {
             console.error(response.error,'response Not ok')
@@ -153,9 +182,18 @@ async function createTask() {
 }
 
 
+// Function For Clearing The Form
+function clearForm() {
+      document.getElementById('taskName').value = '';
+      document.getElementById('projectDropdown').value = '';
+      document.getElementById('sectionDropdown').value = '';
+      
+  }
+
+
 // Logout Function and Clear Local Storage
 function logOut() {
-      localStorage.clear();
-      location.reload();
-  }
+    localStorage.clear();
+    location.reload();
+}
 
