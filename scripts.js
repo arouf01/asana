@@ -43,15 +43,17 @@ async function nextBtn() {
             let responseData = allResponse.data;
             //console.log(responseData)
 
+            // Getting Drop-Down from HTML
+            let getDropDownFromHTML = document.getElementById('projectDropdown');
 
-            let getGroupFromHTML = document.getElementById('projectDropdown');
+            // Loop for Upserting All The Projects
             for (let i = 0; i < responseData.length; i++){
                   let projectName = responseData[i].name;
                   let projectID = responseData[i].gid;
                   //console.log(projectName, projectID);
 
                   let createElementOptions = `<option id = "${projectName}" value="${projectID}">${projectName}</option>`
-                  getGroupFromHTML.innerHTML += createElementOptions;
+                  getDropDownFromHTML.innerHTML += createElementOptions;
             }
 
             setTimeout(() => {
@@ -69,9 +71,9 @@ async function nextBtn() {
 
 
 // Add Event Listener For - Project Change then Change The Section
-const getGroupID = document.getElementById('projectDropdown');
+let getAllProjects = document.getElementById('projectDropdown');
 
-getGroupID.addEventListener('change', (event) => {
+getAllProjects.addEventListener('change', (event) => {
       let project_gid = event.target.value;
 
       let APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
@@ -91,11 +93,13 @@ getGroupID.addEventListener('change', (event) => {
                   let responseData = allResponse.data;
                   //console.log(responseData)
 
+                  // Getting Section From HTML
                   let sectionDropdown = document.getElementById('sectionDropdown');
 
                   // Reseting Drop-Down For Section
                   sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
 
+                  // Loop For Upserting All the Sections for a Specific Project
                   for (let i = 0; i < responseData.length; i++){
                         
                         let sectionName = responseData[i].name;
@@ -115,12 +119,13 @@ getGroupID.addEventListener('change', (event) => {
 
 // Create Task Function
 async function createTask() {
+
       // Getting API Key
       let APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
 
 
       // Getting Workspace
-      let getWorkSpace = await fetch('https://app.asana.com/api/1.0/workspaces', {
+      let getWorkSpaceID = await fetch('https://app.asana.com/api/1.0/workspaces', {
             method: 'GET',
             headers: {
                   'accept': 'application/json',
@@ -128,9 +133,10 @@ async function createTask() {
                   'authorization': `Bearer ${APIKey}`
             }
       });
+
       let workSpaceID;
-      if (getWorkSpace.ok) {
-            let allWorkSpace = await getWorkSpace.json()
+      if (getWorkSpaceID.ok) {
+            let allWorkSpace = await getWorkSpaceID.json()
             workSpaceID = allWorkSpace.data[0].gid;
            // console.log(workSpaceID);
       }
@@ -141,9 +147,9 @@ async function createTask() {
       let taskName = document.getElementById('taskName').value;
       let projectID = document.getElementById('projectDropdown').value;
       let sectionID = document.getElementById('sectionDropdown').value;
-
       //console.log('Project ID: ',projectID,'Section ID: ', sectionID, 'workSpace ID: ',workSpaceID)
       
+      // Mapping The Data for Creating a Task in Asana
       let data = {'data':{
             'name': taskName,
             "memberships": [{
@@ -166,12 +172,16 @@ async function createTask() {
             body: JSON.stringify(data)
       });
 
-      // Checking If Response is OK
+      // Checking If Response is OK!
       if (createTaskResponse.ok) {
             let allResponse = await createTaskResponse.json()
             let responseData = allResponse.data;
+
             console.log('response ok ', responseData);
-            alert('Successfully Task Added')
+
+            alert(`Successfully Task Added.\nPermalink URL:\n${responseData.permalink_url}`);
+ 
+            // Calling Clear Form Function
             clearForm();
       }
       else {
