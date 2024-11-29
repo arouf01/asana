@@ -79,6 +79,19 @@ button {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+#projectAndButton{
+    display: flex;
+}
+#projectDropdown{
+    width: 70%;
+}
+#refreshBtn{
+    width: 25%;
+    margin-left: 15px;
+    border-radius: 25px;
+    height: 50px;
+}
+
 #connectBtn {
     background: linear-gradient(135deg, #6a93ff, #4a73cc);
     color: white;
@@ -99,12 +112,12 @@ button {
     box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
 }
 
-#createTaskBtn {
+#createTaskBtn, #refreshBtn {
     background: linear-gradient(135deg, #38d39f, #2ba57a);
     color: white;
 }
 
-#createTaskBtn:hover {
+#createTaskBtn, #refreshBtn:hover {
     background: linear-gradient(135deg, #2ba57a, #20825f);
     box-shadow: 0 6px 15px rgba(56, 211, 159, 0.3);
 }

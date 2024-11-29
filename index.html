@@ -24,9 +24,12 @@
             <h1>Create Task</h1>
             <div class="form-group">
                 <label for="projectDropdown">Select Project</label>
-                <select id="projectDropdown">
-                    <option value="">Select a Project</option>
-                </select>
+                <div id="projectAndButton">
+                    <select id="projectDropdown">
+                        <option value="">Select a Project</option>
+                    </select>
+                    <button id="refreshBtn" onclick="refreshBtn()">Refresh</button>
+                </div>
 
                 <label for="sectionDropdown">Select a Section</label>
                 <select id="sectionDropdown">

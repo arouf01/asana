@@ -66,9 +66,18 @@ async function nextBtn() {
       else {
             console.error('Error:', response.status, response.statusText);
             document.getElementById('connected').innerText = 'Invalid API Key';
-        }
+      }
+      document.getElementById("refreshBtn").disabled = false;
 } 
 
+
+// Project Refresh Button
+function refreshBtn() {
+      document.getElementById("refreshBtn").disabled = true;
+      document.getElementById('projectDropdown').innerHTML = `<option>Select Group</option>`;
+      nextBtn();
+      console.log('dd')
+}
 
 // Add Event Listener For - Project Change then Change The Section
 let getAllProjects = document.getElementById('projectDropdown');
@@ -110,6 +119,9 @@ getAllProjects.addEventListener('change', (event) => {
                         sectionDropdown.innerHTML += createElementOptions;
                         //console.log(createElementOptions)
                   }
+            }
+            else {
+                  sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
             }
       }
       
@@ -195,7 +207,7 @@ async function createTask() {
 // Function For Clearing The Form
 function clearForm() {
       document.getElementById('taskName').value = '';
-      document.getElementById('projectDropdown').value = '';
+      sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
       document.getElementById('sectionDropdown').value = '';
       
   }
