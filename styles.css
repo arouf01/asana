@@ -102,6 +102,19 @@ button {
     box-shadow: 0 6px 15px rgba(74, 115, 204, 0.3);
 }
 
+.sConnected {
+    background: linear-gradient(135deg, #38d39f, #2ba57a);
+    background-size: 400% 400%;
+    color: white !important;
+}
+
+.nConnected {
+    background: linear-gradient(135deg, #ff6b6b, #d95353);
+    background-size: 400% 400%;
+    color: white !important;
+}
+
+
 #logoutBtn {
     background: linear-gradient(135deg, #ff6b6b, #d95353);
     color: white;

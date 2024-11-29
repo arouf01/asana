@@ -17,11 +17,11 @@ function nextSection() {
       document.getElementById("section2").classList.add("active");
 }
   
-
+let APIKey;
 // Next Button Function For - Getting Projects 
 async function nextBtn() {
       // Get API Key
-      var APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
+      APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
 
       // Getting Projects
       let response = await fetch('https://app.asana.com/api/1.0/projects', {
@@ -32,13 +32,17 @@ async function nextBtn() {
             }
       });
 
+      let connectedBtn = document.getElementById('connected');
+
       // Checking If Response is OK!
       if (response.ok) {
 
             // Saving API Key to Local Stroage
             localStorage.setItem('asana-api-key', APIKey);
 
-            document.getElementById('connected').innerText = 'Connected';
+            connectedBtn.classList.remove('nConnected');
+            connectedBtn.classList.add('sConnected');
+            connectedBtn.innerText = 'Connected';
             let allResponse = await response.json()
             let responseData = allResponse.data;
             //console.log(responseData)
@@ -65,7 +69,8 @@ async function nextBtn() {
       }
       else {
             console.error('Error:', response.status, response.statusText);
-            document.getElementById('connected').innerText = 'Invalid API Key';
+            connectedBtn.classList.add('nConnected');
+            connectedBtn.innerText = 'Invalid API Key';
       }
       document.getElementById("refreshBtn").disabled = false;
 } 
@@ -74,9 +79,9 @@ async function nextBtn() {
 // Project Refresh Button
 function refreshBtn() {
       document.getElementById("refreshBtn").disabled = true;
-      document.getElementById('projectDropdown').innerHTML = `<option>Select Group</option>`;
+      document.getElementById('projectDropdown').innerHTML = `<option>Select a Project</option>`;
+      sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
       nextBtn();
-      console.log('dd')
 }
 
 // Add Event Listener For - Project Change then Change The Section
@@ -84,8 +89,6 @@ let getAllProjects = document.getElementById('projectDropdown');
 
 getAllProjects.addEventListener('change', (event) => {
       let project_gid = event.target.value;
-
-      let APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
 
       // Getting Sections for the Project
       getSections()
@@ -131,10 +134,6 @@ getAllProjects.addEventListener('change', (event) => {
 
 // Create Task Function
 async function createTask() {
-
-      // Getting API Key
-      let APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
-
 
       // Getting Workspace
       let getWorkSpaceID = await fetch('https://app.asana.com/api/1.0/workspaces', {
@@ -207,8 +206,8 @@ async function createTask() {
 // Function For Clearing The Form
 function clearForm() {
       document.getElementById('taskName').value = '';
+      document.getElementById('projectDropdown').value = '';
       sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
-      document.getElementById('sectionDropdown').value = '';
       
   }
 
