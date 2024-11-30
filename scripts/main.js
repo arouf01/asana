@@ -1,8 +1,10 @@
+let APIKey;
+
 // Checkiing If API Key In Local Storage
 window.onload = () => {
-      let getAPIKeyFromLocalStroge = localStorage.getItem('asana-api-key');
+      APIKey = localStorage.getItem('asana-api-key');
   
-      if (getAPIKeyFromLocalStroge !== null) {
+      if (APIKey !== null) {
           if (!document.getElementById("section2").classList.contains("active")) {
                 nextSection();
                 nextBtn();
@@ -17,20 +19,16 @@ function nextSection() {
       document.getElementById("section2").classList.add("active");
 }
   
-let APIKey;
+
 // Next Button Function For - Getting Projects 
 async function nextBtn() {
-      // Get API Key
       APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
 
-      // Getting Projects
-      let response = await fetch('https://app.asana.com/api/1.0/projects', {
-            method: 'GET',
-            headers: {
-                  'accept': 'application/json',
-                  'authorization': `Bearer ${APIKey}`
-            }
-      });
+      // Get Projects URL
+      let getProjectsUrl = 'https://app.asana.com/api/1.0/projects';
+
+      // Calling Fetch Function For Projects
+      let response = await fetchFunction(APIKey, getProjectsUrl);
 
       let connectedBtn = document.getElementById('connected');
 
@@ -43,26 +41,20 @@ async function nextBtn() {
             connectedBtn.classList.remove('nConnected');
             connectedBtn.classList.add('sConnected');
             connectedBtn.innerText = 'Connected';
+
             let allResponse = await response.json()
             let responseData = allResponse.data;
             //console.log(responseData)
 
             // Getting Drop-Down from HTML
             let getDropDownFromHTML = document.getElementById('projectDropdown');
-
-            // Loop for Upserting All The Projects
-            for (let i = 0; i < responseData.length; i++){
-                  let projectName = responseData[i].name;
-                  let projectID = responseData[i].gid;
-                  //console.log(projectName, projectID);
-
-                  let createElementOptions = `<option id = "${projectName}" value="${projectID}">${projectName}</option>`
-                  getDropDownFromHTML.innerHTML += createElementOptions;
-            }
+            
+            // Calling Function For Upserting Projects
+            projectsSections(getDropDownFromHTML, responseData);
 
             setTimeout(() => {
                   nextSection()
-              },2000);
+              },1500);
             
 
               
@@ -90,43 +82,36 @@ let getAllProjects = document.getElementById('projectDropdown');
 getAllProjects.addEventListener('change', (event) => {
       let project_gid = event.target.value;
 
-      // Getting Sections for the Project
-      getSections()
-      async function getSections() {
-            let response = await fetch(`https://app.asana.com/api/1.0/projects/${project_gid}/sections`, {
-                  method: 'GET',
-                  headers: {
-                        'accept': 'application/json',
-                        'authorization': `Bearer ${APIKey}`
-                      }
-            })
+      // Get Sections URL
+      let sectionGetUrl = `https://app.asana.com/api/1.0/projects/${project_gid}/sections`;
+
+      
+      sectionFetch()
+      async function sectionFetch() {
+
+            // Calling FetchFunction For Fetching Sections
+            response = await fetchFunction(APIKey, sectionGetUrl);
+            //console.log(response)
             if (response.ok) {
                   let allResponse = await response.json()
                   let responseData = allResponse.data;
-                  //console.log(responseData)
-
+                  //console.log('responseData',responseData)
+      
                   // Getting Section From HTML
                   let sectionDropdown = document.getElementById('sectionDropdown');
-
+      
                   // Reseting Drop-Down For Section
                   sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
-
-                  // Loop For Upserting All the Sections for a Specific Project
-                  for (let i = 0; i < responseData.length; i++){
-                        
-                        let sectionName = responseData[i].name;
-                        let sectionID = responseData[i].gid;
-                        //console.log(sectionName, sectionID);
       
-                        let createElementOptions = `<option value="${sectionID}">${sectionName}</option>`
-                        sectionDropdown.innerHTML += createElementOptions;
-                        //console.log(createElementOptions)
-                  }
+                  //// Calling Function For Upserting Sections
+                  projectsSections(sectionDropdown, responseData);
             }
             else {
                   sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
             }
       }
+      
+      
       
 });
 
@@ -135,24 +120,16 @@ getAllProjects.addEventListener('change', (event) => {
 // Create Task Function
 async function createTask() {
 
-      // Getting Workspace
-      let getWorkSpaceID = await fetch('https://app.asana.com/api/1.0/workspaces', {
-            method: 'GET',
-            headers: {
-                  'accept': 'application/json',
-                  'content-type': 'application/json',
-                  'authorization': `Bearer ${APIKey}`
-            }
-      });
+      // Get WordSpace ID URL
+      let getWorkSpaceUrl = 'https://app.asana.com/api/1.0/workspaces';
+
+      let getWorkSpaceID = await fetchFunction(APIKey, getWorkSpaceUrl);
 
       let workSpaceID;
       if (getWorkSpaceID.ok) {
             let allWorkSpace = await getWorkSpaceID.json()
             workSpaceID = allWorkSpace.data[0].gid;
-           // console.log(workSpaceID);
       }
-      //console.log(workSpaceID);
-
 
       // Getting All the Needed Value
       let taskName = document.getElementById('taskName').value;
@@ -193,7 +170,7 @@ async function createTask() {
             alert(`Successfully Task Added.\nPermalink URL:\n${responseData.permalink_url}`);
  
             // Calling Clear Form Function
-            clearForm();
+            clearForm(getAllProjects, sectionDropdown);
       }
       else {
             console.error(response.error,'response Not ok')
@@ -201,20 +178,3 @@ async function createTask() {
       //console.log(response)
   
 }
-
-
-// Function For Clearing The Form
-function clearForm() {
-      document.getElementById('taskName').value = '';
-      document.getElementById('projectDropdown').value = '';
-      sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
-      
-  }
-
-
-// Logout Function and Clear Local Storage
-function logOut() {
-    localStorage.clear();
-    location.reload();
-}
-
