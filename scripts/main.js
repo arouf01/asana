@@ -1,3 +1,5 @@
+
+// API KEY!
 let APIKey;
 
 // Checkiing If API Key In Local Storage
@@ -18,19 +20,22 @@ function nextSection() {
       document.getElementById("section1").classList.remove("active");
       document.getElementById("section2").classList.add("active");
 }
-  
 
-// Next Button Function For - Getting Projects 
+// Getting Connected Status
+let connectStatus = document.getElementById('connectStatus');
+
+ // Getting Project Drop-Down from HTML
+let getProjects = document.getElementById('projectDropdown');
+
+// Next Button Function For and Getting Projects
 async function nextBtn() {
       APIKey = document.getElementById('apiKey').value || localStorage.getItem('asana-api-key');
 
       // Get Projects URL
       let getProjectsUrl = 'https://app.asana.com/api/1.0/projects';
 
-      // Calling Fetch Function For Projects
+      // Calling FetchFunction For Projects
       let response = await fetchFunction(APIKey, getProjectsUrl);
-
-      let connectedBtn = document.getElementById('connected');
 
       // Checking If Response is OK!
       if (response.ok) {
@@ -38,32 +43,32 @@ async function nextBtn() {
             // Saving API Key to Local Stroage
             localStorage.setItem('asana-api-key', APIKey);
 
-            connectedBtn.classList.remove('nConnected');
-            connectedBtn.classList.add('sConnected');
-            connectedBtn.innerText = 'Connected';
+            // Removeing and Adding Class
+            connectStatus.classList.remove('nConnected');
+            connectStatus.classList.add('sConnected');
 
+            // Changing Status
+            connectStatus.innerText = 'Connected';
+
+            // Converting Response to JSON and Getting The DATA
             let allResponse = await response.json()
             let responseData = allResponse.data;
             //console.log(responseData)
-
-            // Getting Drop-Down from HTML
-            let getDropDownFromHTML = document.getElementById('projectDropdown');
             
-            // Calling Function For Upserting Projects
-            projectsSections(getDropDownFromHTML, responseData);
+            // Calling FetchFunction For Upserting Projects
+            projectsSections(getProjects, responseData);
 
+            // Calling NextSection Function
             setTimeout(() => {
-                  nextSection()
+                  nextSection();
               },1500);
-            
-
-              
       }
       else {
             console.error('Error:', response.status, response.statusText);
-            connectedBtn.classList.add('nConnected');
-            connectedBtn.innerText = 'Invalid API Key';
+            connectStatus.classList.add('nConnected');
+            connectStatus.innerText = 'Invalid API Key';
       }
+
       document.getElementById("refreshBtn").disabled = false;
 } 
 
@@ -71,15 +76,13 @@ async function nextBtn() {
 // Project Refresh Button
 function refreshBtn() {
       document.getElementById("refreshBtn").disabled = true;
-      document.getElementById('projectDropdown').innerHTML = `<option>Select a Project</option>`;
+      getProjects.innerHTML = `<option>Select a Project</option>`;
       sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
       nextBtn();
 }
 
-// Add Event Listener For - Project Change then Change The Section
-let getAllProjects = document.getElementById('projectDropdown');
 
-getAllProjects.addEventListener('change', (event) => {
+getProjects.addEventListener('change', (event) => {
       let project_gid = event.target.value;
 
       // Get Sections URL
@@ -92,6 +95,8 @@ getAllProjects.addEventListener('change', (event) => {
             // Calling FetchFunction For Fetching Sections
             response = await fetchFunction(APIKey, sectionGetUrl);
             //console.log(response)
+
+            // Checking If Response is OK!
             if (response.ok) {
                   let allResponse = await response.json()
                   let responseData = allResponse.data;
@@ -103,15 +108,13 @@ getAllProjects.addEventListener('change', (event) => {
                   // Reseting Drop-Down For Section
                   sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
       
-                  //// Calling Function For Upserting Sections
+                  // Calling Function For Upserting Sections
                   projectsSections(sectionDropdown, responseData);
             }
             else {
                   sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;
             }
       }
-      
-      
       
 });
 
@@ -123,8 +126,10 @@ async function createTask() {
       // Get WordSpace ID URL
       let getWorkSpaceUrl = 'https://app.asana.com/api/1.0/workspaces';
 
+      // Calling The FetchFunction For Fetching the WorkSpace
       let getWorkSpaceID = await fetchFunction(APIKey, getWorkSpaceUrl);
 
+      // Getting response and Getting WorkSpace ID
       let workSpaceID;
       if (getWorkSpaceID.ok) {
             let allWorkSpace = await getWorkSpaceID.json()
@@ -136,6 +141,7 @@ async function createTask() {
       let projectID = document.getElementById('projectDropdown').value;
       let sectionID = document.getElementById('sectionDropdown').value;
       //console.log('Project ID: ',projectID,'Section ID: ', sectionID, 'workSpace ID: ',workSpaceID)
+
       
       // Mapping The Data for Creating a Task in Asana
       let data = {'data':{
@@ -170,10 +176,10 @@ async function createTask() {
             alert(`Successfully Task Added.\nPermalink URL:\n${responseData.permalink_url}`);
  
             // Calling Clear Form Function
-            clearForm(getAllProjects, sectionDropdown);
+            clearForm(getProjects, sectionDropdown);
       }
       else {
-            console.error(response.error,'response Not ok')
+            console.error(createTaskResponse.status,'response Not ok')
       }
       //console.log(response)
   

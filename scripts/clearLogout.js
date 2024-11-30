@@ -1,7 +1,6 @@
 // Function For Clearing The Form
 function clearForm() {
-    document.getElementById('taskName').value = '';
-    //sectionDropdown.innerHTML = `<option value="">Select a Section</option>`;    
+    document.getElementById('taskName').value = '';  
 }
 
 

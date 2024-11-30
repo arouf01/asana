@@ -135,7 +135,7 @@ button {
     box-shadow: 0 6px 15px rgba(56, 211, 159, 0.3);
 }
 
-#connected {
+#connectStatus {
     margin-top: 15px;
     padding: 10px;
     border-radius: 8px;
